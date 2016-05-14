@@ -11,7 +11,7 @@ class Alert {
 
 	$alert = Your message or any kind of alert
 
-	For those icons(glyphicons) refer to BOOTSRAP manual
+	For those icons(glyphicons) refer to BOOTSTRAP manual
 	_______________________________________________
 
 	*/
