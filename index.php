@@ -7,6 +7,7 @@ $validate = new Validate();
 
 // checking for user fields
 if (Input::exists()) {
+	// validating the required fields
 	$validate->valid([
 		'age' => 'required|length>=:4',
 	]);
