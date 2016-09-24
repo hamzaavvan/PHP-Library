@@ -1,11 +1,20 @@
 <?php
 
 class Validate extends CRUD {
-	public $session_error = false;
-	public $message = '';
-	public $session_type = 'session';
+	public  $session_error = false,
+			$message = '',
+			$session_type = 'session',
+			$address;
 
-	public function valid($array = array()) {
+	/* Data stored when a form submits */
+	private $userData;
+
+	/* Info to be ignore */
+	private $ignorable = ["token"];
+
+	public function valid(array $array = array()) {
+		$this->userData = $array;
+
 		// Reversed that array for delivering proper functionality in nested loops
 		$array = array_reverse($array);
 
@@ -14,27 +23,21 @@ class Validate extends CRUD {
 
 			foreach ($keys as $value) {
 				switch ($value) {
-					case 'required': // check wether required field is empty
+					case 'required': // check wether required fields are empty
 						$this->required($key);
 					break;
 
-					case 'sanitize_email': // check wether email is correct
-						$this->sanitize_email($key);
+					case 'sanitize': // will sanitize specified field
+						$this->sanitize($key);
 					break;
-
-					case 'sanitize_username': // check wether email is correct
-						$this->sanitize_username($key);
-					break;
-
-					/*
-					     _______________________________________________________________
-							The argument for the following case should be in this way:
-							length[operators]:[length]
-
-							$operators = ['==', '!=', '>', '<', '>=', '<=']
-							$length = ANY_INTEGER		
-						 _______________________________________________________________
-					*/
+					
+				   /**
+					 * The argument for the following case should be in this way:
+					 * length[operators]:[length]
+					
+					 * $operators = ['==', '!=', '>', '<', '>=', '<=']
+					 * $length = NUM
+					 */
 					case (preg_match('/^length/', $value) == 1) ? $value : '' : // check for given length
 						$keys = $this->split(':', $value);
 						
@@ -52,7 +55,13 @@ class Validate extends CRUD {
 					break;
 
 					case 'exists':
-							$this->exists($key);
+						$this->exists($key);
+					break;
+
+					case 'csrf':
+						if (!Token::check(Input::get($key))) {
+							$this->setError();
+						}
 					break;
 				}				
 			}
@@ -63,6 +72,27 @@ class Validate extends CRUD {
 	public function setError($message = '') {
 			$this->session_error = true;
 			$this->message = $message;
+	}
+
+	public function valErr() {
+		return $this->session_error;
+	}
+
+	public function userData() {
+		if ($this->valErr() == false) {
+			$keys = array_keys($this->userData);
+			$this->userData = [];
+
+			array_walk($keys, function ($keys) {
+				$values = trim(Input::get($keys));
+
+				if (!in_array($keys, $this->ignorable)) {
+					$this->userData[$keys] = ($keys == "password") ? crc32($values) : $values;
+				}
+			});
+
+			return $this->userData;
+		}
 	}
 
 	public function split($pattern, $string, $reverse = false) {
@@ -80,17 +110,22 @@ class Validate extends CRUD {
 		}
 	}
 
-	private function sanitize_email($email) {
-		if (filter_var(Input::get($email), FILTER_VALIDATE_EMAIL) == false) {
-			$this->setError("Incorrect email address!");
-		}
-	}
+	private function sanitize($key) {
+		switch ($key) {
+			case 'username':
+				if (preg_match('/ /', Input::get($key)) == true) {
+					$this->setError("Usename must not contain any spaces!");
+				}else if (filter_var(Input::get($key), FILTER_VALIDATE_EMAIL) == true) {
+					$this->setError("Usename must not be like email!");
+				}
+			break;
 
-	private function sanitize_username($username) {
-		if (preg_match('/ /', Input::get($username)) == true) {
-			$this->setError("Usename must not contain any spaces!");
-		}else if (filter_var(Input::get($username), FILTER_VALIDATE_EMAIL) == true) {
-			$this->setError("Usename must not like email!");
+			case 'email':
+				if (filter_var(Input::get($key), FILTER_VALIDATE_EMAIL) == false)
+				{
+					$this->setError("Incorrect email address!");
+				}				
+			break;
 		}
 	}
 
@@ -152,8 +187,20 @@ class Validate extends CRUD {
 										Input::get($var)
 									  ]);
 
-		if ($exists->_count != false) {
-			$this->setError(ucfirst($var).' already exists');
+		$this->address = address();
+		
+		switch ($this->address) {
+			case 'signup':
+				if ($exists->_count == true) {
+					$this->setError(ucfirst($var).' already exists');
+				}
+			break;
+
+			case 'signin':
+				if ($exists->_count == false) {
+					$this->setError("No user exists! Have you registered ?");
+				}
+			break;
 		}
 	}
 }
