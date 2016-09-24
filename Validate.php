@@ -139,3 +139,5 @@ class Validate {
 		return $keys;
 	}
 }
+
+?>
