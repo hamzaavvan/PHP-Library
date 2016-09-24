@@ -5,7 +5,6 @@ require_once 'Validate.php';
 $validate = new Validate();
 
 if (Input::exists()) {
-
 	$validate->valid([
 		'age' => 'required|length<=:4',
 	]);
