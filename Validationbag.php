@@ -189,3 +189,5 @@ trait ValidationBag {
 		}
 	}
 }
+
+?>
