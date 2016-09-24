@@ -6,12 +6,24 @@ class Validate extends CRUD {
 			$session_type = 'session',
 			$address;
 
-	/* Data stored when a form submits */
+	/**
+	 * Data stored when a form submits 
+	 * @var array $userData
+	 */
 	private $userData;
 
-	/* Info to be ignore */
+	/**
+	 * Info to be ignore 
+	 * @var array $ignorable
+	 */
 	private $ignorable = ["token"];
 
+	/**
+	 * To check for validity of passed array variables
+	 *
+	 * @param array $array
+	 * @return array $data
+	 */
 	public function valid(array $array = array()) {
 		$this->userData = $array;
 
@@ -29,15 +41,8 @@ class Validate extends CRUD {
 
 					case 'sanitize': // will sanitize specified field
 						$this->sanitize($key);
-					break;
-					
-				   /**
-					 * The argument for the following case should be in this way:
-					 * length[operators]:[length]
-					
-					 * $operators = ['==', '!=', '>', '<', '>=', '<=']
-					 * $length = NUM
-					 */
+					break;					
+				   
 					case (preg_match('/^length/', $value) == 1) ? $value : '' : // check for given length
 						$keys = $this->split(':', $value);
 						
@@ -69,11 +74,22 @@ class Validate extends CRUD {
 		return $this;
 	}
 
+	/**
+	 * to set default error
+	 *
+	 * @param string | array $message
+	 * @return void
+	 */
 	public function setError($message = '') {
 			$this->session_error = true;
 			$this->message = $message;
 	}
 
+	/**
+	 * to get the value set by setError() method
+	 *
+	 * @return bool $session_error
+	 */
 	public function valErr() {
 		return $this->session_error;
 	}
@@ -88,28 +104,47 @@ class Validate extends CRUD {
 
 				if (!in_array($keys, $this->ignorable)) {
 					$this->userData[$keys] = ($keys == "password") ? crc32($values) : $values;
-				}
 			});
 
 			return $this->userData;
 		}
 	}
 
-	public function split($pattern, $string, $reverse = false) {
-		if ($reverse == true && preg_match("/$pattern/", $string)) {
-			$keys = array_reverse(explode($pattern, $string)); // exploding string with reverse order
+	/**
+	 * usable for splitting a string and explode it with given delimeter
+	 *
+	 * @param string $deliimeter
+	 * @param string $value
+	 * @param bool $reverse
+	 * @return array $key
+	 */
+	public function split($delimeter, $value, $reverse = false) {
+		if ($reverse == true && preg_match("/$delimeter/", $value)) {
+			$keys = array_reverse(explode($delimeter, $value)); // exploding string with reverse order
 		}else if ($reverse == false) {
-			$keys = explode($pattern, $string); // Simply explode the string
+			$keys = explode($delimeter, $value); // Simply explode the string
 		}		
 		return $keys;
 	}
 
+	/**
+	 * set the supplied field as mandatory
+	 *
+	 * @param $var
+	 * @return void
+	 */
 	private function required($var) {
 		if (empty(Input::get($var))) {
 			$this->setError("All fields are required!");
 		}
 	}
 
+	/**
+	 * sanitize the user supplied data
+	 *
+	 * @param string $key
+	 * @return void
+	 */
 	private function sanitize($key) {
 		switch ($key) {
 			case 'username':
@@ -129,6 +164,15 @@ class Validate extends CRUD {
 		}
 	}
 
+	/**
+	 * for checking the length of passed $variable along with an $operator and limited $length
+	 * The argument for the following case should be in this way:
+	 * length[operators]:[length]
+	 *
+	 * @param string $var
+	 * @param array $operators = ['==', '!=', '>', '<', '>=', '<=']
+	 * @param bool $length
+	 */
 	private function check_length($var, $operator, $length) {
 		$name = ucfirst($var);
 		switch ($operator) {			
@@ -167,6 +211,12 @@ class Validate extends CRUD {
 		}
 	}
 
+	/**
+	 * to check if the follolwing case is true, default cases are check and remember for setting a setting
+	 *
+	 * @param string $action
+	 * @param string $name
+	 */
 	private function checkbox($action = 'check', $name) {
 		switch($action) {
 			case 'check':
@@ -180,6 +230,12 @@ class Validate extends CRUD {
 		}
 	}
 
+	/**
+	 * default exist system to check whether username/email exists, this can be extendable and is totally dependant
+	 *
+	 * @param string $var
+	 * @return void
+	 */
 	private function exists($var) {
 		$exists = $this->get('users', [
 										$var,
