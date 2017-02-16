@@ -1,2 +1,2 @@
 # PHP-Library
-Some of many useful php libraries for easing code :)
+Some useful php libraries for easing code :)
