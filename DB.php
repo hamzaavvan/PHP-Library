@@ -1,11 +1,10 @@
 <?php
 
-namespace Wingwah\Providers;
+namespace App\Providers;
 
-use Wingwah;
+use App;
 use PDO;
 use Wingwah\Providers\Config;
-use Wingwah\Helpers\DBStash as DBStashTrait;
 
 class DB {
 	/**
