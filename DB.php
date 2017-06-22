@@ -16,10 +16,10 @@ class DB {
 	{
 		$this->table = Wingwah\User::$table;  	
 
-		$host = '@host';
-		$db = '@db';
-		$username = '@username';
-		$password = '@password';
+		$host = '@host'; // your db host
+		$db = '@db'; // your db name
+		$username = '@username'; // your db username
+		$password = '@password'; // your db password
 			
 		try {
 			$this->handle = new PDO("mysql:host=$host;dbname=$db;", 
