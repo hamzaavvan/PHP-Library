@@ -4,7 +4,6 @@ namespace App\Providers;
 
 use App;
 use PDO;
-use App\Providers\Config;
 
 class DB {
     public $query, $error, $results, $whereArr;
