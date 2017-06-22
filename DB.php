@@ -4,15 +4,10 @@ namespace App\Providers;
 
 use App;
 use PDO;
-use Wingwah\Providers\Config;
+use App\Providers\Config;
 
 class DB {
-	/**
-	 * @see Wingwah\Helpers\DBStash() for methods reference
-	 */
-	use DBStashTrait;
-
-	public $query, $error, $results, $whereArr;
+    public $query, $error, $results, $whereArr;
 
     private $handle, $table, $where, $orderBy, $groupBy, $limit, $column;
 
