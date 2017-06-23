@@ -8,8 +8,8 @@ Some useful php libraries for easing code :)
 ```php
 $db = new DB();
 $db->table('tablename');
+```
 
-``
 ## OR Do it directly (DID)
 ```php
 // Fetching results
