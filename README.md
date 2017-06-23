@@ -34,9 +34,37 @@ $query = DB::table('tablename')->query("SELECT col, FROM @table . . .");
  * $type parameter by default set to '{}'
  */
 
+$db = new DB();
+$query = $db->table('tablename')->get();
+
 // single result
 $result = $query->stash();
 
 // for heap of results
 $result = $query->record();
+```
+
+### Fetching data for single columns
+```php
+DB::table('tablename')->get('column')
+```
+
+### Fetching multiple columns of your choice
+```php
+DB::table('tablename')->get([
+  'cols' => ['col1', 'col2', 'col3', 'col4']
+])
+```
+
+### Making use of table reference for every query
+```php
+$db = new DB();
+$db->table('tablename') // set table
+
+// tablename will be set automatically as table reference for every query you made
+$query1 = $db->get(); // no need to set table again
+$result = $query1->stash();
+
+$query2 = $db->where('col1', 'value')->get('col1'); // same for here
+$result = $query2->stash();
 ```
