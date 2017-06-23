@@ -10,7 +10,7 @@ $db = new DB();
 $db->table('tablename');
 ```
 
-### OR Do it directly (DID)
+### Or Do it Directly (DID)
 ```php
 // Fetching results
 DB::table('tablename')->get(); // will fetch every result from table
