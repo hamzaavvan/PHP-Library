@@ -86,4 +86,4 @@ Assets::bootstrap([
 ]);
 ```
 
-If you're not using routing simple edit the `bool isfile(string $file)` method according to your need.
+If you're not using **routing** simple edit the **`bool isfile(string $file)`** method according to your need.
