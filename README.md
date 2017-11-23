@@ -75,13 +75,17 @@ $result = $query2->stash();
 To link *css* and *js* file:
 ```
 Assets::bootstrap([
-   'filename' => [
+   'filename1' => [
      'css' => [
 	"path/to/style.css" ...
       ],
       'js' => [
 	 "path/to/script.js" ...
       ]
+    ],
+   'filename2' => [
+     'css' => [],
+      'js' => []
     ]
 ]);
 ```
