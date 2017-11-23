@@ -77,10 +77,10 @@ To link css and js file per file basis:
 Assets::bootstrap([
 	'home' => [
 		'css' => [
-        "path/to/file.js" ...
-     ],
+			"path/to/file.js" ...
+		],
 		'js' => [
-			  "path/to/file.js" ...
+			"path/to/file.js" ...
 		]
 	]
 ]);
