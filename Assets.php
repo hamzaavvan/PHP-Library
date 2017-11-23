@@ -1,8 +1,8 @@
 <?php
 
-namespace Cms\Helpers;
+namespace App;
 
-use \Cms\Providers\Input;
+use Input;
 
 class Assets {
 	public static function bootstrap(array $assets)
