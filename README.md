@@ -72,16 +72,18 @@ $result = $query2->stash();
 
 ## Working with Assets
 
-To link css and js file per file basis:
+To link *css* and *js* file per file basis:
 ```
 Assets::bootstrap([
    'home' => [
      'css' => [
-	"path/to/file.js" ...
+	"path/to/style.css" ...
       ],
       'js' => [
-	 "path/to/file.js" ...
+	 "path/to/script.js" ...
       ]
     ]
 ]);
 ```
+
+If you're not using routing simple edit the `bool isfile(string $file)` method according to your need.
