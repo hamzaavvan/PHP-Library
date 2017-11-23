@@ -72,7 +72,7 @@ $result = $query2->stash();
 
 ## Working with Assets
 
-To link *css* and *js* file:
+### To link *css* and *js* file:
 ```
 Assets::bootstrap([
    'filename1' => [
@@ -90,7 +90,7 @@ Assets::bootstrap([
 ]);
 ```
 
-To link same style or script file to multiple files:
+### To link same style or script file to multiple files:
 ```
 Assets::bootstrap([
    'filename1 | filename2' => [
