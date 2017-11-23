@@ -99,7 +99,7 @@ Assets::bootstrap([
     ]
 ]);
 
-# You can add as much filenames as you want
+// You can add as much filenames as you want
 ```
 
 
