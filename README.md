@@ -68,3 +68,19 @@ $result = $query1->stash();
 $query2 = $db->where('col1', 'value')->get('col1'); // same for here
 $result = $query2->stash();
 ```
+
+
+## Working with Assets
+
+To link css and js file per file basis:
+```
+Assets::bootstrap([
+	'home' => [
+		'css' => [
+        "path/to/file.js" ...
+     ],
+		'js' => [
+			  "path/to/file.js" ...
+		]
+	]
+]);
